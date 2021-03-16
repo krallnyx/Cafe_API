@@ -48,12 +48,12 @@ def home():
 
 @app.route("/search")
 def get_cafe_at_location():
-    query_location = request.args.get("loc")
-    cafe = db.session.query(Cafe).filter_by(location=query_location).first()
-    if cafe:
-        return jsonify(cafe=cafe.to_dict())
+    query_location = request.args.get("loc").title()
+    cafes = db.session.query(Cafe).filter_by(location=query_location).all()
+    if cafes:
+        return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
     else:
-        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
+        return jsonify(error={"Not Found": "Sorry, we don't have any cafe at that location."})
 
 
 if __name__ == '__main__':
